@@ -1,0 +1,14 @@
+Dockerfile
+docker-compose.yml
+go.mod
+go.sum
+.env
+cmd/api/main
+**/*.out
+vendor/
+*_test.go
+testdata/
+*.local
+.idea/
+.vscode/
+*.swp

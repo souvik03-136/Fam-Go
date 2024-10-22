@@ -7,11 +7,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASSWORD=yourpassword
-      - DB_NAME=yourdbname
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: yourpassword
+      DB_NAME: yourdbname
     depends_on:
       - mysql
     volumes:
@@ -23,10 +23,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=yourpassword
-      - MYSQL_DATABASE=yourdbname
+      MYSQL_ROOT_PASSWORD: yourpassword
+      MYSQL_DATABASE: yourdbname
     volumes:
       - mysql_data:/var/lib/mysql
-
-volumes:
-  mysql_data:

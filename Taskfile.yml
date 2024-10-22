@@ -1,0 +1,68 @@
+version: '3'
+tasks:
+  migrate:
+    desc: "Run database migrations"
+    cmds:
+      - sql-migrate up
+    silent: false
+
+  run:
+    desc: "Run the Go application"
+    cmds:
+      - go run cmd/api/main.go
+    silent: false
+
+  fetch_videos:
+    desc: "Fetch videos from YouTube"
+    cmds:
+      - go run internal/tasks/video_fetcher.go
+    silent: false
+
+  build:
+    desc: "Build the Go application"
+    cmds:
+      - go build -o myapp ./cmd/api/main.go
+    silent: false
+
+  clean:
+    desc: "Clean up built binaries"
+    cmds:
+      - rm -f myapp
+    silent: false
+
+  start:
+    desc: "Run migrations and start the server"
+    cmds:
+      - task: migrate
+      - task: run
+    silent: false
+
+  docker_build:
+    desc: "Build Docker image"
+    cmds:
+      - docker build -t myapp:latest .
+    silent: false
+
+  docker_run:
+    desc: "Run Docker container"
+    cmds:
+      - docker run -d --rm --name myapp -p 8080:8080 myapp:latest
+    silent: false
+
+  docker_stop:
+    desc: "Stop Docker container"
+    cmds:
+      - docker stop myapp
+    silent: false
+
+  docker_compose_up:
+    desc: "Start services using Docker Compose"
+    cmds:
+      - docker-compose up -d
+    silent: false
+
+  docker_compose_down:
+    desc: "Stop services using Docker Compose"
+    cmds:
+      - docker-compose down
+    silent: false
