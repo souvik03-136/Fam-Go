@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile  # Ensure to specify the Dockerfile if it's named differently
     container_name: go-youtube-app
     ports:
       - "8080:8080"
@@ -27,3 +29,6 @@ services:
       MYSQL_DATABASE: yourdbname
     volumes:
       - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

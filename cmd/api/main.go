@@ -13,7 +13,6 @@ func main() {
 		log.Fatal("Failed to load configuration")
 		return
 	}
-
 	s := server.NewServer()
 
 	if err := s.Start(); err != nil {

@@ -93,14 +93,14 @@ func (vf *VideoFetcher) FetchLatestVideos(ctx context.Context) {
 	}
 
 	for _, item := range result.Items {
-		video := database.Video{
+		videoParams := database.CreateVideoParams{
 			Title:        item.Snippet.Title,
 			Description:  sql.NullString{String: item.Snippet.Description, Valid: true},
 			PublishedAt:  item.Snippet.PublishedAt,
 			ThumbnailUrl: sql.NullString{String: item.Snippet.Thumbnails.Default.Url, Valid: true},
 			VideoUrl:     "https://www.youtube.com/watch?v=" + item.Id.VideoId,
 		}
-		if err := vf.DB.CreateVideo(ctx, video); err != nil {
+		if err := vf.DB.CreateVideo(ctx, videoParams); err != nil {
 			log.Printf("Failed to store video: %v", err)
 		}
 	}
