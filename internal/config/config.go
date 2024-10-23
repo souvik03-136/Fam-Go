@@ -10,7 +10,6 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
-	"github.com/souvik03-136/Fam-Go/internal/merrors"
 )
 
 type Config struct {
@@ -32,13 +31,13 @@ func LoadConfig() *Config {
 	}
 
 	if err := validateYouTubeAPIKeys(apiKeys); err != nil {
-		merrors.InternalServer(nil, "YouTube API validation failed: "+err.Error())
+		log.Println("YouTube API validation failed: " + err.Error())
 		return nil
 	}
 
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
-		merrors.BadRequest(nil, "DATABASE_URL environment variable is required")
+		log.Println("DATABASE_URL environment variable is required") // Log error
 		return nil
 	}
 
@@ -53,12 +52,12 @@ func LoadConfig() *Config {
 
 	db, err := sql.Open("mysql", databaseURL)
 	if err != nil {
-		merrors.InternalServer(nil, "Failed to connect to the database: "+err.Error())
+		log.Println("Failed to connect to the database: " + err.Error()) // Log error
 		return nil
 	}
 
 	if err := db.Ping(); err != nil {
-		merrors.InternalServer(nil, "Failed to ping the database: "+err.Error())
+		log.Println("Failed to ping the database: " + err.Error()) // Log error
 		return nil
 	}
 
@@ -76,8 +75,18 @@ func validateYouTubeAPIKeys(apiKeys []string) error {
 	for _, key := range apiKeys {
 		if key != "" {
 			resp, err := http.Get("https://www.googleapis.com/youtube/v3/videos?part=id&key=" + key)
-			if err == nil && resp.StatusCode == http.StatusOK {
+			if err != nil {
+				log.Printf("Failed to validate API key %s: %v", key, err)
+				continue
+			}
+			defer resp.Body.Close()
+
+			// Log the response status code for debugging
+			if resp.StatusCode == http.StatusOK {
+				log.Println("Successfully validated YouTube API key")
 				return nil
+			} else {
+				log.Printf("API key %s returned status code %d", key, resp.StatusCode)
 			}
 		}
 	}

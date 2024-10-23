@@ -2,15 +2,13 @@ version: '3.8'
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile  # Ensure to specify the Dockerfile if it's named differently
+    build: .
     container_name: go-youtube-app
     ports:
       - "8080:8080"
     environment:
       DB_HOST: mysql
-      DB_PORT: 3306
+      DB_PORT: 3306 
       DB_USER: root
       DB_PASSWORD: yourpassword
       DB_NAME: yourdbname
@@ -23,12 +21,24 @@ services:
     image: mysql:latest
     container_name: mysql-db
     ports:
-      - "3306:3306"
+      - "3307:3306"  
     environment:
       MYSQL_ROOT_PASSWORD: yourpassword
       MYSQL_DATABASE: yourdbname
     volumes:
       - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - "8081:80"  
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306  
+      MYSQL_ROOT_PASSWORD: yourpassword
+    depends_on:
+      - mysql
 
 volumes:
   mysql_data:

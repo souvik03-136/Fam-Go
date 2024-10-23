@@ -1,38 +1,121 @@
-# Go YouTube Video Fetcher API
 
-## Overview
-A Go API to fetch the latest videos from YouTube for a given search query, with data stored in a MySQL database.
+# YouTube Video Fetcher API
 
-## Requirements
-- Docker
-- Docker Compose
+This project is a Go application that fetches the latest videos from YouTube based on a predefined search query. The application stores the video details in a MySQL database and provides an API for retrieving this data in a paginated format.
 
-## Setup
+### Prerequisites
 
-1. Clone the repository:
+- Go (version 1.16 or higher)
+- MySQL server
+- [Taskfile](https://taskfile.dev/) (for task automation)
+- Docker (optional, for containerization)
 
+### Environment Variables
+
+Create a `.env` file in the root directory of the project based on the `.example.env` file provided. Ensure to fill in the necessary values for your environment.
+
+
+## Taskfile Commands
+
+The following commands can be run using the Taskfile:
+
+- **migrate**: Run database migrations.
+  ```bash
+  task migrate
+  ```
+
+- **run**: Run the Go application.
+  ```bash
+  task run
+  ```
+
+- **fetch_videos**: Fetch videos from YouTube.
+  ```bash
+  task fetch_videos
+  ```
+
+- **build**: Build the Go application.
+  ```bash
+  task build
+  ```
+
+- **clean**: Clean up built binaries.
+  ```bash
+  task clean
+  ```
+
+- **start**: Run migrations and start the server.
+  ```bash
+  task start
+  ```
+
+- **docker_build**: Build the Docker image.
+  ```bash
+  task docker_build
+  ```
+
+- **docker_run**: Run the Docker container.
+  ```bash
+  task docker_run
+  ```
+
+- **docker_stop**: Stop the Docker container.
+  ```bash
+  task docker_stop
+  ```
+
+- **docker_compose_up**: Start services using Docker Compose.
+  ```bash
+  task docker_compose_up
+  ```
+
+- **docker_compose_down**: Stop services using Docker Compose.
+  ```bash
+  task docker_compose_down
+  ```
+
+## API Endpoints
+
+### Fetch Videos
+
+- **GET** `/v1/videos`
+  - Retrieves stored video data in a paginated response sorted in descending order of published date-time.
+
+- **POST** `/v1/videos/fetch`
+  - Initiates the fetching of the latest videos from YouTube and stores them in the database.
+
+## Error Handling
+
+Errors are handled using the utility functions defined in the `utils.Basetemplate` and the error helpers in the `merrors` folder. When handling errors, provide the context and error message without redefining them constantly.
+
+## Database Setup
+
+This project uses XAMPP for the MySQL database. Ensure that your database is running and configured correctly.
+
+## Instructions
+
+1. Clone the repository and navigate to the project directory.
+2. Create the `.env` file from the `.example.env` template.
+3. Set up your MySQL database and ensure the connection details in the `.env` file are correct.
+4. Run the initial migrations:
    ```bash
-   git clone <repo_url>
-   cd <repo_name>
+   task migrate
    ```
-
-2. Create a `.env` file and set your environment variables:
-
-   ```
-   DB_HOST=mysql
-   DB_PORT=3306
-   DB_USER=root
-   DB_PASSWORD=yourpassword
-   DB_NAME=yourdbname
-   ```
-
-3. Start the application:
-
+5. Start the server:
    ```bash
-   docker-compose up --build
+   task start
    ```
 
-4. The API will be available at `http://localhost:8080`.
+## Bonus Features
+
+- Support for multiple YouTube API keys to handle quota exhaustion.
+- Optional dashboard for viewing stored videos with filtering and sorting options.
+
+## Reference
+
+- [YouTube Data API v3](https://developers.google.com/youtube/v3/getting-started)
+- [YouTube Search API Reference](https://developers.google.com/youtube/v3/docs/search/list)
+
 
 
 ```plaintext
@@ -82,15 +165,6 @@ A Go API to fetch the latest videos from YouTube for a given search query, with 
 └── sqlc.yaml                         # SQLC config for query generation
 ```
 
-## API Endpoints
-- **GET /videos**: Fetch paginated video data.
-
-## Tasks
-To run scheduled tasks, use:
-
-```bash
-task run
-```
 
 ## License
 
