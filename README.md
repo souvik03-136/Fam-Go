@@ -1,7 +1,7 @@
 
-# YouTube Video Fetcher API
+# Fampay Backend Assignment
 
-This project is a Go application that fetches the latest videos from YouTube based on a predefined search query. The application stores the video details in a MySQL database and provides an API for retrieving this data in a paginated format.
+This is a backend assignment for Fampay. The assignment is to create a REST API that fetches videos from Youtube and stores them in a database. The API should also provide a way to search the stored videos.
 
 ### Prerequisites
 
